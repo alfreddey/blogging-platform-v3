@@ -16,10 +16,6 @@ public class LoggingAspect {
         Object result = jp.proceed();
         long time = System.currentTimeMillis() - start;
 
-        log.info("{} executed in {} ms",
-                jp.getSignature().toShortString(),
-                time);
-
         System.out.printf("%s executed in %sms\n", jp.getSignature().toShortString(), time);
 
         return result;

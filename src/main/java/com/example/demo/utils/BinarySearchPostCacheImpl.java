@@ -13,7 +13,7 @@ public class BinarySearchPostCacheImpl implements PostSearch {
     }
 
     @Override
-    public Post search(String term) {
+    public Post findByTitle(String title) {
         var posts = postCache.getAll();
 
         PostSorts.sort(posts);
@@ -24,7 +24,7 @@ public class BinarySearchPostCacheImpl implements PostSearch {
         while (left <= right) {
             var mid = left + (right - left) / 2;
             var midPost = posts.get(mid);
-            var comparison = midPost.getTitle().compareTo(term);
+            var comparison = midPost.getTitle().compareTo(title);
 
             if (comparison == 0) {
                 return midPost;
