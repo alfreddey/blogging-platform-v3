@@ -6,6 +6,10 @@ import com.example.demo.model.entity.Post;
 import com.example.demo.repository.interfaces.PostRepository;
 import com.example.demo.service.interfaces.PostService;
 import com.example.demo.utils.PostSearch;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -14,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@CacheConfig(cacheNames = "posts")
 public class MongoPostService implements PostService {
     private final PostRepository postRepository;
     private final Cache<Post> postCache;
@@ -24,6 +29,7 @@ public class MongoPostService implements PostService {
         this.postRepository = postRepository;
         this.postSearch = postSearch;
     }
+
 
     @Override
     public List<Post> getAll(int page, int size, String sortBy) {
@@ -41,6 +47,7 @@ public class MongoPostService implements PostService {
         return posts;
     }
 
+    @Cacheable
     @Override
     public Post getById(String postId) {
         var cacheResult = postCache.getById(postId);
@@ -56,6 +63,7 @@ public class MongoPostService implements PostService {
         return post;
     }
 
+    @CachePut(key = "#result.id")
     @Transactional
     @Override
     public Post create(Post post) {
@@ -65,6 +73,7 @@ public class MongoPostService implements PostService {
         return post;
     }
 
+    @CacheEvict(key = "#postId")
     @Transactional
     @Override
     public void delete(String postId) {
@@ -72,15 +81,17 @@ public class MongoPostService implements PostService {
         postRepository.deleteById(postId);
     }
 
+    @CachePut(key = "#postId")
     @Transactional
     @Override
-    public Post updatePostContent(String id, String content) {
-        var post = postRepository.updatePostContent(id, content);
-        postCache.put(id, post);
+    public Post updatePostContent(String postId, String content) {
+        var post = postRepository.updatePostContent(postId, content);
+        postCache.put(postId, post);
 
         return post;
     }
 
+    @Cacheable(key = "#title")
     @Override
     public Post findByTitle(String title) {
         var post = postSearch.findByTitle(title);
