@@ -1,13 +1,10 @@
 package com.example.demo.repository.interfaces;
 
 import com.example.demo.model.entity.User;
+import com.example.demo.repository.interfaces.custom.CustomUserRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface UserRepository {
-    User getById(String userId);
-    List<User> getAll();
-    User insert(User user);
-    boolean delete(String userId);
-    User updatePassword(String userId, String password);
+@Repository
+public interface UserRepository extends CustomUserRepository, MongoRepository<User, String> {
 }
