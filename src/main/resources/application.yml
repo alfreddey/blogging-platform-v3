@@ -9,9 +9,8 @@ spring:
     schema:
       printer:
         enabled: true
-  data:
-    mongodb:
-      uri: ${MONGODB_URI}
+  mongodb:
+    uri: ${MONGODB_URI}
 
 server:
   port: 8080
