@@ -45,12 +45,8 @@ public class UserRestController {
             )
     })
     @GetMapping("/{id}")
-    public ApiResponse<UserResponse> getById(@Valid @PathVariable String id) {
+    public ApiResponse<UserResponse> getById(@PathVariable String id) {
         var user = userService.getById(id);
-
-        if (user == null) {
-            throw new ResourceNotFoundException("User not found with ID: " + id);
-        }
 
         return new ApiResponse<>(HttpStatus.OK, "User retrieved successfully", userMapper.toResponse(user));
     }
@@ -66,8 +62,8 @@ public class UserRestController {
             )
     })
     @GetMapping
-    public ApiResponse<List<UserResponse>> getAll() {
-        var users = userService.getAll();
+    public ApiResponse<List<UserResponse>> getAll(@RequestParam (defaultValue = "0") int page, @RequestParam (defaultValue = "4") int size, @RequestParam (defaultValue = "id") String sortBy) {
+        var users = userService.getAll(page, size, sortBy);
 
         return new ApiResponse<>(HttpStatus.OK, "Users retrieved successfully", users.stream().map(userMapper::toResponse).toList());
     }
@@ -118,9 +114,9 @@ public class UserRestController {
             )
     })
     @DeleteMapping("/{id}")
-    public ApiResponse<Boolean> delete(@Valid @PathVariable String id) {
-        var response = userService.delete(id);
+    public ApiResponse<Void> delete(@Valid @PathVariable String id) {
+        userService.delete(id);
 
-        return new ApiResponse<>(HttpStatus.NO_CONTENT, "User deleted successfully", response);
+        return new ApiResponse<>(HttpStatus.NO_CONTENT, "User deleted successfully", null);
     }
 }
