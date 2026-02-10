@@ -6,7 +6,10 @@ import com.example.demo.model.entity.Post;
 import com.example.demo.repository.interfaces.PostRepository;
 import com.example.demo.service.interfaces.PostService;
 import com.example.demo.utils.PostSearch;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,14 +26,16 @@ public class MongoPostService implements PostService {
     }
 
     @Override
-    public List<Post> getAll(int page, int size) {
+    public List<Post> getAll(int page, int size, String sortBy) {
         var cacheResult = postCache.getAll();
 
         if (cacheResult != null && !cacheResult.isEmpty() && cacheResult.size() >= size) {
             return cacheResult;
         }
 
-        var posts = postRepository.getAll(page, size);
+        var pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+        var posts = postRepository.findAll(pageable).getContent();
+
         posts.forEach(postCache::put);
 
         return posts;
@@ -44,31 +49,30 @@ public class MongoPostService implements PostService {
             return cacheResult;
         }
 
-        var post = postRepository.getById(postId);
-
-        if (post == null) {
-            throw new ResourceNotFoundException("Post with id: " + postId + " not found");
-        }
+        var post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + postId));
 
         postCache.put(post);
 
         return post;
     }
 
+    @Transactional
     @Override
     public Post create(Post post) {
-        post = postRepository.insert(post);
+        post = postRepository.save(post);
         postCache.put(post);
 
         return post;
     }
 
+    @Transactional
     @Override
-    public boolean delete(String postId) {
+    public void delete(String postId) {
         postCache.remove(postId);
-        return postRepository.delete(postId);
+        postRepository.deleteById(postId);
     }
 
+    @Transactional
     @Override
     public Post updatePostContent(String id, String content) {
         var post = postRepository.updatePostContent(id, content);
@@ -77,15 +81,20 @@ public class MongoPostService implements PostService {
         return post;
     }
 
-    // TODO: SEARCH DB IF NOT IN CACHE
     @Override
-    public Post search(String searchTerm) {
-        var post = postSearch.search(searchTerm);
+    public Post findByTitle(String title) {
+        var post = postSearch.findByTitle(title);
 
-        if (post == null) {
-            throw new ResourceNotFoundException("Post not found with search term: " + searchTerm);
+        if (post != null) {
+            return post;
         }
 
-        return post;
+        post = postRepository.findByTitle(title);
+
+        if (post != null) {
+            return post;
+        }
+
+        throw new ResourceNotFoundException("Post not found with title: " + title);
     }
 }

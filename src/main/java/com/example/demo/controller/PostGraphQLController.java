@@ -22,30 +22,30 @@ public class PostGraphQLController {
         this.postMapper = postMapper;
     }
 
-    @QueryMapping
-    public PostResponse post(@Argument String id) {
-        return postMapper.toResponse(postService.getById(id));
-    }
-
-    @QueryMapping
-    public List<PostResponse> posts(@Argument int page, @Argument int size) {
-        return postService.getAll(page, size).stream().map(postMapper::toResponse).toList();
-    }
-
-    @MutationMapping
-    public PostResponse createPost(@Argument PostRequest input) {
-        var post = postMapper.toEntity(input);
-
-        return postMapper.toResponse(postService.create(post));
-    }
-
-    @MutationMapping
-    public boolean deletePost(@Argument String id) {
-        return postService.delete(id);
-    }
-
-    @MutationMapping
-    public PostResponse updatePostContent(@Argument String id, @Argument PostRequest input) {
-        return postMapper.toResponse(postService.updatePostContent(id, input.getContent()));
-    }
+//    @QueryMapping
+//    public PostResponse post(@Argument String id) {
+//        return postMapper.toResponse(postService.getById(id));
+//    }
+//
+//    @QueryMapping
+//    public List<PostResponse> posts(@Argument int page, @Argument int size) {
+//        return postService.getAll(page, size).stream().map(postMapper::toResponse).toList();
+//    }
+//
+//    @MutationMapping
+//    public PostResponse createPost(@Argument PostRequest input) {
+//        var post = postMapper.toEntity(input);
+//
+//        return postMapper.toResponse(postService.create(post));
+//    }
+//
+//    @MutationMapping
+//    public boolean deletePost(@Argument String id) {
+//        return postService.delete(id);
+//    }
+//
+//    @MutationMapping
+//    public PostResponse updatePostContent(@Argument String id, @Argument PostRequest input) {
+//        return postMapper.toResponse(postService.updatePostContent(id, input.getContent()));
+//    }
 }

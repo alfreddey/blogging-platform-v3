@@ -32,8 +32,8 @@ public class PostRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "List of posts retrieved successfully")
     })
     @GetMapping
-    public ApiResponse<List<PostResponse>> getAll(@RequestParam (defaultValue = "0") int page, @RequestParam(defaultValue = "4") int size) {
-        var posts = postService.getAll(page, size)
+    public ApiResponse<List<PostResponse>> getAll(@RequestParam (defaultValue = "0") int page, @RequestParam(defaultValue = "4") int size, @RequestParam(defaultValue = "id") String sortBy) {
+        var posts = postService.getAll(page, size, sortBy)
                 .stream()
                 .map(postMapper::toResponse)
                 .toList();
@@ -67,8 +67,9 @@ public class PostRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Post deleted successfully")
     })
     @DeleteMapping("/{postId}")
-    public ApiResponse<Boolean> delete(@Valid @PathVariable String postId) {
-        return new ApiResponse<>(HttpStatus.OK, "Post deleted successfully", postService.delete(postId));
+    public ApiResponse<Void> delete(@Valid @PathVariable String postId) {
+        postService.delete(postId);
+        return new ApiResponse<>(HttpStatus.OK, "Post deleted successfully", null);
     }
 
     @Operation(summary = "Update post content", description = "Partially updates the content field of an existing post.")
@@ -84,7 +85,7 @@ public class PostRestController {
     }
 
     @Operation(
-            summary = "Search posts",
+            summary = "Search posts by title",
             description = "Finds a post by an exact title match using optimized Binary Search."
     )
     @ApiResponses(value = {
@@ -93,7 +94,7 @@ public class PostRestController {
     })
     @GetMapping("/search")
     public ApiResponse<PostResponse> searchPost(@Valid @RequestParam String query) {
-        var post = postService.search(query);
+        var post = postService.findByTitle(query);
 
         return new ApiResponse<>(HttpStatus.OK, "Post found successfully", postMapper.toResponse(post));
     }

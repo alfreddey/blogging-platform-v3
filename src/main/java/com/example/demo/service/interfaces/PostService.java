@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface PostService {
     Post getById(String postId);
-    List<Post> getAll(int page, int size);
+    List<Post> getAll(int page, int size, String sortBy);
     Post create(Post post);
-    boolean delete(String id);
+    void delete(String id);
     Post updatePostContent(String id, String content);
-    Post search(String term);
+    Post findByTitle(String title);
 }
