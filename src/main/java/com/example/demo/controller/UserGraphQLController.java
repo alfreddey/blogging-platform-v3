@@ -27,23 +27,23 @@ public class UserGraphQLController {
         return userMapper.toResponse(userService.getById(id));
     }
 
-//    @QueryMapping
-//    public List<UserResponse> users() {
-//        return userService.getAll().stream().map(userMapper::toResponse).toList();
-//    }
-//
-//    @MutationMapping
-//    public UserResponse createUser(@Argument UserRequest input) {
-//        return userMapper.toResponse(userService.create(userMapper.toEntity(input)));
-//    }
-//
-//    @MutationMapping
-//    public boolean deleteUser(@Argument String id) {
-//        return userService.delete(id);
-//    }
-//
-//    @MutationMapping
-//    public UserResponse updateUserPassword(@Argument String id, @Argument String password) {
-//        return userMapper.toResponse(userService.updatePassword(id, password));
-//    }
+    @QueryMapping
+    public List<UserResponse> users(@Argument int page, @Argument int size, @Argument String sortBy) {
+        return userService.getAll(page, size, sortBy).stream().map(userMapper::toResponse).toList();
+    }
+
+    @MutationMapping
+    public UserResponse createUser(@Argument UserRequest input) {
+        return userMapper.toResponse(userService.create(userMapper.toEntity(input)));
+    }
+
+    @MutationMapping
+    public void deleteUser(@Argument String id) {
+        userService.delete(id);
+    }
+
+    @MutationMapping
+    public UserResponse updateUserPassword(@Argument String id, @Argument String password) {
+        return userMapper.toResponse(userService.updatePassword(id, password));
+    }
 }
