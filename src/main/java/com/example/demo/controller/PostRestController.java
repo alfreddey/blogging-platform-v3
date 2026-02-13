@@ -77,7 +77,7 @@ public class PostRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Content updated successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Post not found")
     })
-    @PatchMapping("/{postId}")
+    @PatchMapping("/{postId}/content")
     public ApiResponse<PostResponse> updatePostContent(@Valid @PathVariable String postId, @RequestBody PostRequest request) {
         var post = postService.updatePostContent(postId, request.getContent());
 

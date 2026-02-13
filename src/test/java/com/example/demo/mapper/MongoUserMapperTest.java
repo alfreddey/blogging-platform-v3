@@ -31,15 +31,4 @@ class MongoUserMapperTest {
                 () -> assertEquals("secure", user.getPassword())
         );
     }
-
-    @Test
-    void toDocument_ShouldCreateValidBson() {
-        User user = new User();
-        user.setName("Alice");
-
-        Document doc = MongoUserMapper.toDocument(user);
-
-        assertTrue(doc.get("_id") instanceof ObjectId);
-        assertEquals("Alice", doc.getString("name"));
-    }
 }

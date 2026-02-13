@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.*;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.Mapper;
 import com.example.demo.model.entity.User;
 import com.example.demo.service.interfaces.UserService;
