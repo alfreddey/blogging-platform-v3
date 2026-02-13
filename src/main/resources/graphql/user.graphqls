@@ -1,11 +1,11 @@
 extend type Query {
     user(id: ID!): UserResponse
-    users: [UserResponse]
+    users(page: Int! = 0, size: Int! = 4, sortBy: String! = "id"): [UserResponse]
 }
 
 extend type Mutation {
     createUser(input: CreateUserRequest): UserResponse
-    deleteUser(id: ID!): Boolean
+    deleteUser(id: ID!): Void
     updateUserPassword(id: ID!, password: String): UserResponse
 }
 
@@ -19,3 +19,5 @@ input CreateUserRequest {
     email: String!,
     password: String!
 }
+
+scalar Void
