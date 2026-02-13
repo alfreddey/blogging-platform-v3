@@ -1,11 +1,11 @@
 extend type Query {
     post(id: ID!): PostResponse
-    posts(page: Int! = 0, size: Int! = 4): [PostResponse]
+    posts(page: Int! = 0, size: Int! = 4, sortBy: String! = "id"): [PostResponse]
 }
 
 extend type Mutation {
     createPost(input: CreatePostRequest): PostResponse
-    deletePost(id: ID!): Boolean
+    deletePost(id: ID!): Void
     updatePostContent(id: ID!, input: PostRequest): PostResponse
 }
 
