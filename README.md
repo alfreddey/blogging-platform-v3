@@ -1,77 +1,271 @@
-# BLOGGING-PLATFORM
+# BLOGGING PLATFORM
 
-A web-based Spring Boot application that leverages RESTful and GraphQL APIs to manage a blogging system. This project applies advanced concepts like AOP, Bean Validation, and algorithmic data optimization.
+A production-ready Spring Boot backend that exposes **REST** and **GraphQL** APIs for managing a blogging system. The application follows a clean layered architecture and integrates caching, validation, AOP logging, and optimized data access using MongoDB.
+
+---
 
 # Table of Contents
 1. [Project Overview](#project-overview)
-2. [Feature Summary](#feature-summary)
-3. [Technical Requirements](#technical-requirements)
-4. [Installation](#installation)
-5. [Environment Configuration](#environment-configuration)
-6. [API Documentation & Testing](#api-documentation--testing)
-7. [Usage](#usage)
-8. [Contribution](#contribution)
-9. [License](#license)
-10. [Contact](#contact)
+2. [Architecture](#architecture)
+3. [Features](#features)
+4. [Tech Stack](#tech-stack)
+5. [Installation](#installation)
+6. [Environment Configuration](#environment-configuration)
+7. [Caching Configuration](#caching-configuration)
+8. [API Documentation & Testing](#api-documentation--testing)
+9. [Running the Application](#running-the-application)
+10. [Contribution](#contribution)
+11. [License](#license)
+12. [Contact](#contact)
+
+---
 
 ## Project Overview
-This phase of the Blogging Platform focuses on building a scalable backend using Spring Boot. The system handles complex operations like constructor-based dependency injection, centralized exception handling, and performance monitoring to ensure a maintainable and efficient web application.
 
-## Feature Summary
-* **Dual API Support**: Integrated RESTful endpoints and GraphQL schemas (queries/mutations) for flexible data retrieval.
-* **Advanced DSA Integration**: Efficient sorting, searching, and pagination algorithms for scalable content delivery.
-* **Validation & Error Handling**: Robust data integrity using Bean Validation and centralized `@ControllerAdvice`.
-* **Cross-Cutting Concerns (AOP)**: Automated logging and performance monitoring using `@Before`, `@After`, and `@Around` aspects.
-* **Interactive Documentation**: Automatic API documentation generated via Springdoc OpenAPI and Swagger UI.
+This Blogging Platform backend is built with **Spring Boot 3.x** and designed using enterprise-grade best practices:
 
-## Technical Requirements
+- Constructor-based Dependency Injection
+- Layered architecture (Controller → Service → Repository)
+- Centralized exception handling with `@ControllerAdvice`
+- AOP-based logging and performance monitoring
+- Pagination, sorting, and optimized query logic
+- Spring Cache integration for improved read performance
+
+The system is optimized for scalability, maintainability, and clean separation of concerns.
+
+---
+
+## Architecture
+
+```
+Controller Layer  →  Service Layer  →  Repository Layer  →  MongoDB
+```
+
+- **Controllers**: Handle REST & GraphQL requests
+- **Services**: Business logic + transaction boundaries
+- **Repositories**: Data access abstraction
+- **Caching Layer**: Spring Cache abstraction
+- **AOP Layer**: Logging & performance monitoring
+
+---
+
+## Features
+
+- ✅ RESTful CRUD endpoints
+- ✅ GraphQL queries & mutations
+- ✅ Pagination & Sorting
+- ✅ Bean Validation (`@Valid`, `@NotNull`, etc.)
+- ✅ Centralized Exception Handling
+- ✅ AOP Logging (`@Before`, `@After`, `@Around`)
+- ✅ Spring Cache integration
+- ✅ MongoDB integration using environment-based configuration
+
+---
+
+## Tech Stack
+
 | Area | Description |
-| :--- | :--- |
-| **Framework** | Spring Boot 3.x (Spring Web, Validation, AOP, GraphQL) |
-| **Language** | Java 21 |
-| **Database** | NoSQL (MongoDB) |
-| **Architecture** | Layered (Controller -> Service -> Repository)  |
-| **Documentation** | Springdoc OpenAPI / Swagger UI |
+|------|------------|
+| Framework | Spring Boot 3.x (Web, Validation, AOP, GraphQL, Cache) |
+| Language | Java 21 |
+| Database | MongoDB |
+| Architecture | Layered (Controller → Service → Repository) |
+| Documentation | Springdoc OpenAPI / Swagger UI |
+| Build Tool | Maven |
+
+---
 
 ## Installation
-1.  **Prerequisites**: Ensure you have **JDK 21** or higher installed.
-2.  **Clone the Repository**:
-    ```bash
-    git clone https://github.com/alfreddey/blogging-platform-v2
-    cd blogging-platform-v2
-    ```
-3.  **Build the Project**:
-    ```bash
-    mvn clean install
-    ```
+
+### 1️⃣ Prerequisites
+
+- JDK 21+
+- Maven
+- MongoDB (local or cloud e.g. MongoDB Atlas)
+
+---
+
+### 2️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/alfreddey/blogging-platform-v2
+cd blogging-platform-v2
+```
+
+---
+
+### 3️⃣ Build the Project
+
+```bash
+mvn clean install
+```
+
+---
 
 ## Environment Configuration
-The application uses Spring Profiles to manage different environments efficiently:
-* **dev**: Local development settings.
-* **test**: Configurations for automated testing environments.
-* **prod**: Optimized settings for production deployment.
+
+The application uses **environment variables** for secure configuration.
+
+### MongoDB URI (Required)
+
+The MongoDB connection string is **not hardcoded**.  
+It must be provided via an environment variable:
+
+```bash
+export MONGO_URI=mongodb://localhost:27017/blogdb
+```
+
+Or for Windows (PowerShell):
+
+```powershell
+setx MONGO_URI "mongodb://localhost:27017/blogdb"
+```
+
+In `application.yml`:
+
+```yaml
+spring:
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+```
+
+This ensures:
+- No credentials are committed to source control
+- Secure production deployment
+- Easy switching between environments
+
+---
+
+### Spring Profiles
+
+The project supports:
+
+- `dev` – Local development
+- `test` – Automated testing
+- `prod` – Production deployment
 
 Run with a specific profile:
-`mvn spring-boot:run -Dspring-boot.run.profiles=dev`
+
+```bash
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+---
+
+## Caching Configuration
+
+The application uses **Spring Cache abstraction** with an in-memory cache manager.
+
+### Cache Manager Configuration
+
+```java
+@Bean
+public CacheManager cacheManager() {
+    return new ConcurrentMapCacheManager("users", "posts");
+}
+```
+
+### Cache Names
+
+- `users`
+- `posts`
+
+### Usage
+
+- `@Cacheable("posts")` – Cache frequently accessed blog posts
+- `@Cacheable("users")` – Cache user lookups
+- `@CacheEvict` – Evict cache on create/update/delete operations
+
+### Enable Caching
+
+```java
+@EnableCaching
+```
+
+### Strategy
+
+- Cache read-heavy operations (GET requests)
+- Evict cache on write operations
+- Improve response time for frequently accessed resources
+
+---
 
 ## API Documentation & Testing
-* **REST API**: Tested via **Postman**; follows standard CRUD conventions with structured JSON responses.
-* **GraphQL**: Explore schemas and test mutations via **GraphiQL** or **Altair**.
-* **OpenAPI**: Access the interactive Swagger UI at `/swagger-ui.html`.
 
-## Usage
-1.  **Initialize**: Run the application via your IDE or Maven command.
-2.  **Manage Content**: Use REST or GraphQL to create, view, sort, and filter blog posts.
-3.  **Monitor**: Observe logs and performance metrics generated by AOP aspects during CRUD operations.
+### REST API
+
+- Swagger UI:
+```
+http://localhost:8080/swagger-ui.html
+```
+
+- Tested using Postman
+- Standard JSON request/response structure
+
+---
+
+### GraphQL
+
+- Accessible via `/graphql`
+- Test using:
+    - GraphiQL
+    - Altair
+    - Postman (GraphQL mode)
+
+Supports:
+- Queries
+- Mutations
+- Pagination arguments
+
+---
+
+## Running the Application
+
+After setting the `MONGO_URI`:
+
+```bash
+mvn spring-boot:run
+```
+
+Or run directly from your IDE.
+
+---
+
+## Monitoring & Logging
+
+The application uses AOP to:
+
+- Log method execution
+- Measure execution time
+- Track performance of CRUD operations
+
+This improves observability and debugging efficiency.
+
+---
 
 ## Contribution
-1.  Fork the repository.
-2.  Create a feature branch (`git checkout -b feature-branch`).
-3.  Commit changes with descriptive messages (`git commit -m 'Add feature'`).
-4.  Push to the branch and open a Pull Request.
+
+1. Fork the repository
+2. Create a feature branch
+   ```bash
+   git checkout -b feature/your-feature
+   ```
+3. Commit changes
+   ```bash
+   git commit -m "Add meaningful feature"
+   ```
+4. Push and open a Pull Request
+
+---
 
 ## License
-This project is licensed under the MIT License.
+
+MIT License
+
+---
 
 ## Contact
-**Alfred Nelly** - [alfrednelly246@gmail.com](mailto:alfrednelly246@gmail.com)
+
+**Alfred Nelly**  
+📧 alfrednelly246@gmail.com  
