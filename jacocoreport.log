@@ -1,0 +1,17 @@
+[INFO] Error stacktraces are turned on.
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------------< com.example:demo >--------------------------
+[INFO] Building demo 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- jacoco:0.8.10:report (default-cli) @ demo ---
+[INFO] Loading execution data file /Users/alfreddey/IdeaProjects/amali/blogging-platform-v3/target/jacoco.exec
+[INFO] Analyzed bundle 'demo' with 31 classes
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.328 s
+[INFO] Finished at: 2026-02-11T20:11:40Z
+[INFO] ------------------------------------------------------------------------
