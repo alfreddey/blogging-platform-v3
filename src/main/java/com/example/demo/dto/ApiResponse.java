@@ -1,7 +1,9 @@
 package com.example.demo.dto;
 
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 
+@Data
 public class ApiResponse<T> {
     public HttpStatus status;
     public String message;

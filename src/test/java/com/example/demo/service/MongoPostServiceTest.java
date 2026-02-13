@@ -6,24 +6,25 @@ import static org.mockito.Mockito.*;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.entity.Post;
 import com.example.demo.repository.interfaces.PostRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 
 import java.util.List;
 import java.util.Optional;
 
+@ExtendWith(MockitoExtension.class)
 class MongoPostServiceTest {
 
+    @Mock
     private PostRepository postRepository;
-    private MongoPostService postService;
 
-    @BeforeEach
-    void setUp() {
-        postRepository = mock(PostRepository.class);
-        postService = new MongoPostService(postRepository);
-    }
+    @InjectMocks
+    private MongoPostService postService;
 
     @Test
     void getAll_ShouldReturnPagedContent() {
