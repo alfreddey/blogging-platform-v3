@@ -1,10 +1,11 @@
-package com.example.demo.repository.interfaces.custom;
+package com.example.demo.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import com.example.demo.model.entity.User;
+import com.example.demo.repository.interfaces.custom.CustomUserRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

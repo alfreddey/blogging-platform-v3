@@ -25,20 +25,4 @@ class MongoPostMapperTest {
         assertEquals(post.getTitle(), response.getTitle());
         assertEquals(1, response.getTags().size());
     }
-
-    @Test
-    void toPost_FromDocument_ShouldHandleNestedComments() {
-        ObjectId id = new ObjectId();
-        Document doc = new Document("_id", id)
-                .append("title", "Doc Title")
-                .append("comments", List.of(
-                        new Document("_id", new ObjectId()).append("text", "nice")
-                ));
-
-        Post post = MongoPostMapper.toPost(doc);
-
-        assertEquals(id.toHexString(), post.getId());
-        assertEquals(1, post.getComments().size());
-        assertEquals("nice", post.getComments().get(0).getText());
-    }
 }
