@@ -2,15 +2,10 @@ package com.example.demo.mapper;
 
 import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
-import com.example.demo.model.entity.Comment;
 import com.example.demo.model.entity.Post;
-import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 
 @Component
 public class MongoPostMapper implements Mapper<Post, PostResponse, PostRequest> {
@@ -24,6 +19,7 @@ public class MongoPostMapper implements Mapper<Post, PostResponse, PostRequest> 
         response.setAuthorEmail(post.getAuthorEmail());
         response.setTags(post.getTags());
         response.setCreatedAt(post.getCreatedAt());
+        response.setComments(post.getComments());
 
         return response;
     }
