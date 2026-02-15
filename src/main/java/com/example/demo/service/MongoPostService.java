@@ -41,8 +41,7 @@ public class MongoPostService implements PostService {
     @Transactional
     @Override
     public Post create(Post post) {
-        post = postRepository.save(post);
-        return post;
+        return postRepository.save(post);
     }
 
     @CacheEvict(key = "#postId")
