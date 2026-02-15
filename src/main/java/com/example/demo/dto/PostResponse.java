@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import com.example.demo.model.entity.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,5 +17,6 @@ public class PostResponse {
     private String content;
     private String authorEmail;
     private List<String> tags;
+    private List<Comment> comments;
     private Date createdAt;
 }
