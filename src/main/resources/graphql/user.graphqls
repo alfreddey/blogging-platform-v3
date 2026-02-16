@@ -4,17 +4,18 @@ extend type Query {
 }
 
 extend type Mutation {
-    createUser(input: CreateUserRequest): UserResponse
+    createUser(input: UserRequest): UserResponse
     deleteUser(id: ID!): Void
     updateUserPassword(id: ID!, password: String): UserResponse
 }
 
 type UserResponse {
-    name: String!,
-    email: String!
+    id: ID,
+    name: String,
+    email: String
 }
 
-input CreateUserRequest {
+input UserRequest {
     name: String!,
     email: String!,
     password: String!

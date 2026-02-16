@@ -1,30 +1,23 @@
 extend type Query {
     post(id: ID!): PostResponse
-    posts(page: Int! = 0, size: Int! = 4, sortBy: String! = "id"): [PostResponse]
+    posts(page: Int = 0, size: Int = 4, sortBy: String = "id"): [PostResponse]
 }
 
 extend type Mutation {
-    createPost(input: CreatePostRequest): PostResponse
+    createPost(input: PostRequest): PostResponse
     deletePost(id: ID!): Void
-    updatePostContent(id: ID!, input: PostRequest): PostResponse
+    updatePostContent(id: ID!, content: String!): PostResponse
 }
 
 input PostRequest {
+    title: String!,
+    content: String!,
+    authorEmail: String!
+}
+
+type PostResponse {
     id: ID,
     title: String,
     content: String,
     authorEmail: String
-}
-
-type PostResponse {
-    id: ID!,
-    title: String!,
-    content: String!,
-    authorEmail: String!
-}
-
-input CreatePostRequest {
-    title: String!,
-    content: String!,
-    authorEmail: String!
 }

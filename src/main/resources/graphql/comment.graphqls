@@ -1,0 +1,20 @@
+extend type Query {
+    comment(postId: ID!, commentId: ID!): CommentResponse
+    comments(postId: ID!, page: Int = 0, size: Int = 4, sortBy: String = "id"): [CommentResponse]
+}
+
+extend type Mutation {
+    createComment(postId: ID!, input: CommentRequest!): CommentResponse
+}
+
+type CommentResponse {
+    id: ID,
+    authorEmail: String,
+    text: String,
+    createdAt: String
+}
+
+input CommentRequest {
+    authorEmail: String!,
+    text: String!
+}

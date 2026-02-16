@@ -45,7 +45,7 @@ public class PostGraphQLController {
     }
 
     @MutationMapping
-    public PostResponse updatePostContent(@Argument String id, @Argument PostRequest input) {
-        return postMapper.toResponse(postService.updatePostContent(id, input.getContent()));
+    public PostResponse updatePostContent(@Argument String id, @Argument String content) {
+        return postMapper.toResponse(postService.updatePostContent(id, content));
     }
 }
