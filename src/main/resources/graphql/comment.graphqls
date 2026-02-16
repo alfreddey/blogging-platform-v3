@@ -5,6 +5,8 @@ extend type Query {
 
 extend type Mutation {
     createComment(postId: ID!, input: CommentRequest!): CommentResponse
+    deleteComment(postId: ID!, commentId: ID!): Void
+    updateCommentText(postId: ID!, commentId: ID!, text: String!): CommentResponse
 }
 
 type CommentResponse {

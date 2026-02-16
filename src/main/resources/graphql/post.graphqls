@@ -19,5 +19,7 @@ type PostResponse {
     id: ID,
     title: String,
     content: String,
+    comments: [CommentResponse],
     authorEmail: String
+    tags: [String]
 }

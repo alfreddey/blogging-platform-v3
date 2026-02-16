@@ -40,4 +40,15 @@ public class CommentGraphQLController {
 
         return commentMapper.toResponse(comment);
     }
+
+    @MutationMapping
+    public void deleteComment(@Argument String postId, @Argument String commentId) {
+        commentService.delete(postId, commentId);
+    }
+
+    @MutationMapping
+    public CommentResponse updateCommentText(@Argument String postId, @Argument String commentId, @Argument String text) {
+        var updated = commentService.updateText(postId, commentId, text);
+        return commentMapper.toResponse(updated);
+    }
 }
